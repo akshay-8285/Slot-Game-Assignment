@@ -160,6 +160,12 @@ public class ReelController : MonoBehaviour
             symbolImages[i].rectTransform.anchoredPosition = new Vector2(0f, targetGridY);
         }
 
+        // Play reel stop sound when landing on the target
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlayReelStop();
+        }
+
         // 4. Little landing bounce
         yield return StartCoroutine(BounceRoutine(startBaseY));
 

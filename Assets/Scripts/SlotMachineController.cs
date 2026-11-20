@@ -107,7 +107,16 @@ public class SlotMachineController : MonoBehaviour
             {
                 statusText.text = "NOT ENOUGH CREDITS!";
             }
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayInsufficientBalance();
+            }
             return;
+        }
+
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.PlaySpinButton();
         }
 
         StartCoroutine(SpinSequenceRoutine());
@@ -174,6 +183,12 @@ public class SlotMachineController : MonoBehaviour
             reels[i].StartSpin(availableSymbols);
         }
 
+        // Start continuous reel spin sound loop
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StartReelSpinLoop();
+        }
+
         // 6. Wait before stopping reels
         yield return new WaitForSeconds(baseSpinDuration);
 
@@ -194,6 +209,12 @@ public class SlotMachineController : MonoBehaviour
             yield return null;
         }
 
+        // Stop continuous reel spin sound loop
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.StopReelSpinLoop();
+        }
+
         // 9. Check if all 3 center symbols match
         if (winEvaluator != null)
         {
@@ -206,6 +227,13 @@ public class SlotMachineController : MonoBehaviour
 
             if (result.isWin)
             {
+                // Play win sound (or jackpot fanfare for highest payout)
+                bool isJackpot = result.winningSymbol != null && result.winningSymbol.payoutMultiplier >= 100;
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayWin(isJackpot);
+                }
+
                 // Player won: add credits and show win messages
                 if (walletManager != null)
                 {
@@ -258,6 +286,12 @@ public class SlotMachineController : MonoBehaviour
     {
         if (leverImage != null && leverDownSprite != null)
         {
+            // Play mechanical lever pull sound
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayLeverPull();
+            }
+
             leverImage.sprite = leverDownSprite;
             yield return new WaitForSeconds(0.18f);
 
@@ -293,7 +327,14 @@ public class SlotMachineController : MonoBehaviour
 
         if (walletManager != null)
         {
-            walletManager.SetBet(amount);
+            if (walletManager.CurrentBet != amount)
+            {
+                walletManager.SetBet(amount);
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlayBetChange();
+                }
+            }
         }
     }
 

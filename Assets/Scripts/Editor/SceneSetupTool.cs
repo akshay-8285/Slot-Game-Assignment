@@ -332,6 +332,32 @@ public static class SceneSetupTool
         WalletManager wm = gmObj.GetComponent<WalletManager>() ?? gmObj.AddComponent<WalletManager>();
         WinEvaluator we = gmObj.GetComponent<WinEvaluator>() ?? gmObj.AddComponent<WinEvaluator>();
         SlotMachineController smc = gmObj.GetComponent<SlotMachineController>() ?? gmObj.AddComponent<SlotMachineController>();
+        AudioManager am = gmObj.GetComponent<AudioManager>() ?? gmObj.AddComponent<AudioManager>();
+
+        // Wire AudioManager
+        AudioSource[] audioSources = gmObj.GetComponents<AudioSource>();
+        AudioSource sfxSource = audioSources.Length > 0 ? audioSources[0] : gmObj.AddComponent<AudioSource>();
+        AudioSource loopSource = audioSources.Length > 1 ? audioSources[1] : gmObj.AddComponent<AudioSource>();
+        sfxSource.playOnAwake = false;
+        sfxSource.spatialBlend = 0f;
+        loopSource.playOnAwake = false;
+        loopSource.spatialBlend = 0f;
+        loopSource.loop = true;
+
+        string audioDir = "Assets/Game/Audio/RawSignalCasinoLite/WAV/";
+        SerializedObject amSO = new SerializedObject(am);
+        amSO.FindProperty("spinButtonClickSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "slot_spin_button_01.wav");
+        amSO.FindProperty("leverPullSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "slot_lever_pull_01.wav");
+        amSO.FindProperty("reelSpinLoopSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "dice_roll_table_01.wav");
+        amSO.FindProperty("reelStopSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "slot_reel_stop_01.wav");
+        amSO.FindProperty("winSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "slot_win_small_01.wav");
+        amSO.FindProperty("jackpotSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "slot_win_big_01.wav");
+        amSO.FindProperty("betChangeSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "ui_bet_up_01.wav");
+        amSO.FindProperty("insufficientBalanceSound").objectReferenceValue = AssetDatabase.LoadAssetAtPath<AudioClip>(audioDir + "chip_single_place_01.wav");
+        amSO.FindProperty("sfxSource").objectReferenceValue = sfxSource;
+        amSO.FindProperty("loopSource").objectReferenceValue = loopSource;
+        amSO.FindProperty("sfxVolume").floatValue = 1.0f;
+        amSO.ApplyModifiedProperties();
 
         // Wire SlotMachineController
         SerializedObject smcSO = new SerializedObject(smc);

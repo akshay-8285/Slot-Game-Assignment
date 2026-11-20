@@ -1,6 +1,6 @@
 # Slot Game Assignment
 
-A 2D UI-based 3-reel classic slot machine game created in Unity using provided graphic assets. The project features reel spinning with sequential stopping, a center payline win evaluation system, configurable payouts, and balance/betting controls.
+A 2D UI-based 3-reel classic slot machine game created in Unity using provided graphic assets and audio feedback. The project features reel spinning with sequential stopping, a center payline win evaluation system, configurable payouts, sound effects, and balance/betting controls.
 
 ## Unity Version
 - **Unity 6.3 LTS (6000.3.9f1)**
@@ -12,6 +12,7 @@ A 2D UI-based 3-reel classic slot machine game created in Unity using provided g
 - **Payline Evaluation:** Evaluates center row symbols across all 3 reels for winning combinations.
 - **Configurable Payouts:** Symbol multipliers and payouts are defined via serialized data.
 - **Wallet & Betting Controls:** Adjustable bet sizes (10, 50, 100 credits) with balance tracking and win payouts.
+- **Sound Effects:** Audio feedback for spin button clicks, lever pulls, continuous reel spinning, individual reel stops, bet changes, wins, and jackpot payouts.
 - **Win Presentation:** In-game status banner and modal popup on winning spins.
 - **Responsive UI:** Built with Unity UI Canvas Scaler (1920x1080 reference resolution) to adapt across common aspect ratios.
 
@@ -38,17 +39,23 @@ A 2D UI-based 3-reel classic slot machine game created in Unity using provided g
 - **TextMesh Pro:** UI typography
 - **WebGL:** WebAssembly export for browser playback
 
+## Assets and Audio Credits
+- **Graphics & UI:** Provided assignment slot machine art and symbol assets.
+- **Sound Effects:** Free [Raw Signal: Casino & Slots LITE](https://hopefulsham.itch.io/raw-signal-casino-slots-138-synthesized-sfx) audio pack.
+
 ## Project Structure
 ```
 Slot-Game-Assignment/
 ├── Assets/
 │   ├── Game/
+│   │   ├── Audio/                     # Sound effects (Raw Signal Casino & Slots LITE)
 │   │   ├── Scene/
 │   │   │   └── SlotGame_Main.unity    # Main playable slot machine scene
 │   │   └── Slot Machine/              # Cabinet, lever, background, and symbol sprites
 │   ├── Scripts/                       # C# gameplay scripts
 │   │   ├── Editor/
 │   │   │   └── SceneSetupTool.cs      # Editor tool to wire UI references
+│   │   ├── AudioManager.cs            # Sound effects manager and audio playback
 │   │   ├── GameManager.cs             # Session management
 │   │   ├── ReelController.cs          # Reel movement, wrap-around, and deceleration
 │   │   ├── SlotMachineController.cs   # Main coordinator: spin lifecycle and UI flow
@@ -65,9 +72,11 @@ Slot-Game-Assignment/
 
 ## How to Open and Run in Unity
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/akshay-8285/Slot-Game-Assignment.git
-   ```
+
+```bash
+git clone https://github.com/akshay-8285/Slot-Game-Assignment.git
+```
+
 2. Open **Unity Hub**.
 3. Click **Add** and select the cloned folder `Slot-Game-Assignment`.
 4. Open the project with **Unity 6.3 LTS (6000.3.9f1)**.
@@ -80,7 +89,9 @@ Slot-Game-Assignment/
 3. In **Player Settings > Publishing Settings**, ensure **Decompression Fallback** is enabled if hosting on basic HTTP servers.
 4. Click **Build** and specify `Build/WebGL` as the output directory.
 5. To test the build locally, run an HTTP server from the build directory:
-   ```bash
-   python -m http.server 8080 --directory Build/WebGL
-   ```
-   Then navigate to `http://localhost:8080` in any modern web browser.
+
+```bash
+python -m http.server 8080 --directory Build/WebGL
+```
+
+Then navigate to `http://localhost:8080` in any modern web browser.
