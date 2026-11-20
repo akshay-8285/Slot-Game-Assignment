@@ -1,29 +1,20 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// WalletManager tracks the player's balance and current bet amount.
-/// It provides clean methods to check if the player can afford a spin,
-/// deduct the bet when spinning, and add payouts upon winning.
-/// </summary>
+// Tracks the player's balance and current bet amount.
 public class WalletManager : MonoBehaviour
 {
     [Header("Wallet Settings")]
-    [Tooltip("Starting credits given to the player when the game starts")]
     [SerializeField] private int startingBalance = 1000;
-
-    [Tooltip("Default bet amount per spin")]
     [SerializeField] private int defaultBet = 10;
 
-    // Runtime state
     private int currentBalance;
     private int currentBet;
 
-    // Public read-only accessors
     public int CurrentBalance => currentBalance;
     public int CurrentBet => currentBet;
 
-    // Events triggered when values change, allowing UI to update automatically
+    // Events to notify the UI when balance or bet changes
     public event Action<int> OnBalanceChanged;
     public event Action<int> OnBetChanged;
 
@@ -35,23 +26,18 @@ public class WalletManager : MonoBehaviour
 
     private void Start()
     {
-        // Notify listeners of initial values
+        // Update UI with initial values
         OnBalanceChanged?.Invoke(currentBalance);
         OnBetChanged?.Invoke(currentBet);
     }
 
-    /// <summary>
-    /// Checks whether the player has enough balance to place the current bet.
-    /// </summary>
+    // Checks if the player has enough credits to place the bet
     public bool CanAffordBet()
     {
         return currentBalance >= currentBet;
     }
 
-    /// <summary>
-    /// Deducts the current bet amount from balance.
-    /// Call this when a spin begins.
-    /// </summary>
+    // Deducts the bet when a spin starts
     public bool TryDeductBet()
     {
         if (CanAffordBet())
@@ -64,9 +50,7 @@ public class WalletManager : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// Adds winnings to the player's balance.
-    /// </summary>
+    // Adds winnings to the balance
     public void AddPayout(int amount)
     {
         if (amount > 0)
@@ -76,9 +60,7 @@ public class WalletManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Changes the current bet amount.
-    /// </summary>
+    // Changes the current bet amount
     public void SetBet(int newBet)
     {
         if (newBet > 0)
@@ -88,9 +70,7 @@ public class WalletManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Resets the wallet balance back to starting balance.
-    /// </summary>
+    // Resets the balance back to starting credits
     public void ResetBalance()
     {
         currentBalance = startingBalance;

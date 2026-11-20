@@ -1,10 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Data structure containing the result of a win evaluation.
-/// Contains whether the spin resulted in a win, which symbol matched,
-/// the total payout amount, and a descriptive message for the UI.
-/// </summary>
+// Stores the outcome of a spin
 [System.Serializable]
 public struct WinResult
 {
@@ -14,21 +10,10 @@ public struct WinResult
     public string resultMessage;
 }
 
-/// <summary>
-/// WinEvaluator checks whether all reels have matching symbols on the payline.
-/// Rule: Player wins when all 3 visible reels land on the exact same symbol.
-/// Payout = Current Bet * Winning Symbol's Payout Multiplier.
-/// </summary>
+// Checks if the 3 center symbols match and calculates winnings.
 public class WinEvaluator : MonoBehaviour
 {
-    /// <summary>
-    /// Checks the center symbols of the 3 reels to determine win or loss.
-    /// </summary>
-    /// <param name="symbol0">Symbol on Reel 0 center payline</param>
-    /// <param name="symbol1">Symbol on Reel 1 center payline</param>
-    /// <param name="symbol2">Symbol on Reel 2 center payline</param>
-    /// <param name="betAmount">The bet amount placed for this spin</param>
-    /// <returns>WinResult containing win status, winning symbol, and payout</returns>
+    // Evaluates center symbols (player wins when all 3 match)
     public WinResult Evaluate(SymbolData symbol0, SymbolData symbol1, SymbolData symbol2, int betAmount)
     {
         WinResult result = new WinResult();
@@ -42,13 +27,13 @@ public class WinEvaluator : MonoBehaviour
             return result;
         }
 
-        // Check if all 3 reels show the same symbol
+        // Check if all 3 center symbols are the same
         bool allThreeMatch = (symbol0.symbolName == symbol1.symbolName) && 
                              (symbol1.symbolName == symbol2.symbolName);
 
         if (allThreeMatch)
         {
-            // WIN: All 3 symbols match
+            // Win: payout = bet * multiplier
             result.isWin = true;
             result.winningSymbol = symbol0;
             result.payoutAmount = betAmount * symbol0.payoutMultiplier;
@@ -56,7 +41,7 @@ public class WinEvaluator : MonoBehaviour
         }
         else
         {
-            // LOSS: Symbols do not all match
+            // Loss: no match
             result.isWin = false;
             result.winningSymbol = null;
             result.payoutAmount = 0;

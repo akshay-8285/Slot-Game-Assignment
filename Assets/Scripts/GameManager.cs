@@ -1,23 +1,17 @@
 using UnityEngine;
 
-/// <summary>
-/// GameManager controls overall game initialization, state, and session management.
-/// It coordinates between the SlotMachineController and high-level game session flow.
-/// </summary>
+// Coordinates the game session and allows restarting the game.
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     [Header("Controllers")]
-    [Tooltip("Reference to the main slot machine controller")]
     [SerializeField] private SlotMachineController slotMachineController;
-
-    [Tooltip("Reference to the wallet manager")]
     [SerializeField] private WalletManager walletManager;
 
     private void Awake()
     {
-        // Simple Singleton pattern for easy access
+        // Singleton setup so other scripts can access GameManager easily
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -27,10 +21,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    /// <summary>
-    /// Resets the game balance to starting funds.
-    /// Useful when the player runs out of credits.
-    /// </summary>
+    // Resets the player's balance back to the starting amount
     public void RestartGame()
     {
         if (walletManager != null)
